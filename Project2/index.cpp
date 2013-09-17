@@ -5,6 +5,7 @@
 #include"filereader.h"
 #include <sstream>
 
+
 struct StudentRecord {
 	MyString sid;
 	MyString firstName;
@@ -13,7 +14,8 @@ struct StudentRecord {
 	int size;
 
 };
-
+using std::string;
+string recordName;
 enum command{
 	ADD,
 	DELETE,
@@ -29,6 +31,7 @@ struct index{
 struct index*indexArray=NULL;
 int indexCount=0,recordAlreadyExists;
 long globalOffset;
+
 struct availability{
 	int size;
 	long offset;
@@ -61,14 +64,16 @@ void sort()
 void writeToResultsFile(MyString str)
 {
 	ofstream outfile;
-  outfile.open("resultsFile.txt", std::ios_base::app);
+		string file=recordName+"_resultsFile.txt";
+  outfile.open(file, std::ios_base::app);
   outfile << str<<endl; 
   outfile.close();
 }
 void writeToResultsFile(string str)
 {
 	ofstream outfile;
-  outfile.open("resultsFile.txt", std::ios_base::app);
+	string file=recordName+"_resultsFile.txt";
+  outfile.open(file, std::ios_base::app);
   outfile << str<<endl; 
   outfile.close();
 }
@@ -81,7 +86,7 @@ void printIndexArray()
 	//	writeToResultsFile(str);
 	//	return;
 	//}
-	str="INDEX:";
+	str="Index:";
 	cout<<str<<endl;
 		writeToResultsFile(str);
 
@@ -163,7 +168,8 @@ long useaList(int size)
 void storeAvailabilityListinFile()
 {
 	ofstream availabilityListFile;
-availabilityListFile.open("availability_list_file.txt");
+		string file=recordName+"_availability_list_file.txt";
+availabilityListFile.open(file);
 temp=first;
 if(temp==NULL)
 {
@@ -184,7 +190,8 @@ availabilityListFile.close();
 void readFromAvailabilityListFile()
 {
 	std::string buffer;
-	ifstream  availabilityListFile("availability_list_file.txt");
+	string file=recordName+"_availability_list_file.txt";
+	ifstream  availabilityListFile(file);
 
 int i=0;
 struct availability aInfo;
@@ -209,14 +216,15 @@ while(!availabilityListFile.eof())
 	}
 }
 availabilityListFile.close();
-cout<<count;
+
 return;
 }
 
 void storeIndexInFile()
 {
 	ofstream indexFile;
-indexFile.open("index_file.txt");
+	string file=recordName+"_index_file.txt";
+indexFile.open(file);
 if(indexCount<=0)
 {
 	indexFile.close();
@@ -236,8 +244,8 @@ indexFile.close();
 
 void readFromIndexFile()
 {
-	
-	ifstream  indexFile("index_file.txt");
+	string file=recordName+"_index_file.txt";
+	ifstream  indexFile(file);
 
 int i=0;
 struct index iInfo;
@@ -269,7 +277,7 @@ while(!indexFile.eof())
 	}
 }
 indexFile.close();
-cout<<count;
+
 return;
 }
 
@@ -288,7 +296,7 @@ void printAvailabilityList()
 		writeToResultsFile(str);
 		return;
 	}*/
-	str="AVAILABILITY:";
+	str="Availability:";
 	cout<<str<<endl;
 	writeToResultsFile(str);
 		while(temp!=NULL)
@@ -347,14 +355,15 @@ int findSize(struct StudentRecord sr)
 int addStudentRecord(struct StudentRecord sr)
 {
 	ofstream fp;
+	string file=recordName;
 long offset2=useaList(sr.size+4+3);
 if(offset2==-1)
 {
-fp.open("studentRecord" ,ios::out | ios::app | ios::binary);
+fp.open(file ,ios::out | ios::app | ios::binary);
 }
 else
 {
-	fp.open("studentRecord" ,ios::out | ios::in | ios::binary);
+	fp.open(file ,ios::out | ios::in | ios::binary);
 	fp.seekp(0,END);
 	globalOffset=fp.tellp();
 	fp.seekp(offset2,BEGIN);
@@ -421,7 +430,8 @@ ifstream fp;
 //    {
 //        cout << "no ok"<<endl;
 //    }
-fp.open("studentRecord" ,ios::out | ios::in | ios::binary);
+
+fp.open(recordName ,ios::out | ios::in | ios::binary);
 //fp.seek( offset, BEGIN );
 fp.seekg(offset,ios::beg);
 fp.read( (char *)&count, sizeof( int ) );
@@ -463,8 +473,8 @@ return sr;
 void writeToResultsFile(char*str)
 {
 	ofstream outfile;
-
-  outfile.open("resultsFile.txt", std::ios_base::app);
+	string file=recordName+"_resultsFile.txt";
+  outfile.open(file, std::ios_base::app);
   outfile << str<<endl; 
   outfile.close();
 }
@@ -496,9 +506,10 @@ void readInputFile()
 	struct StudentRecord sr;
 
 	
-	ifstream inFile("InputFile.txt");
+	//ifstream inFile("InputFile.txt");
 	//sr.size=0;
-	while(inFile>>str)
+	
+	while(cin>>str)
 	{
 		sr.size=0;
 		str.token(buffer,str.len()," ");
@@ -607,44 +618,21 @@ void readInputFile()
 	}
 }
 
-void main()
+int main(int argc,char* argv[])
 {
-	/*struct StudentRecord sr;
-	sr.firstName="Karthik";
-	sr.lastName="Guruprasad";
-	sr.major="CS";
-	sr.sid="123";
-	sr.size=findSize(sr);*/
+	
+	recordName=argv[1];
+	//cout<<recordName;
 
 	readFromIndexFile();
 	readFromAvailabilityListFile();
 	readInputFile();
-	//addStudentRecord(sr);
-	//
-
-	/*readFromAvailabilityListFile();
-	struct availability aInfo;
-	aInfo.offset=100;
-	aInfo.size=200;
-	addToaList(aInfo);
-	printAvailabilityList();
-	storeAvailabilityListinFile();
 	
-	sort();
-	printIndexArray();
-	storeIndexInFile();
-	cout<<searchIndexArray(90);*/
 	
 	
 	_getch();
 	
-	/*int size=0;
-	char ch[]="jello";
-	while(*(ch+size) !='\0')
-		size++;
-		
-	printf("%d",sizeof(ch));
-	_getch();*/
+	
 	
 }
 

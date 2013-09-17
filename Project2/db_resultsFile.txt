@@ -1,7 +1,7 @@
 No record with SID=610491123 exists
 No record with SID=219127719 exists
 804158049|Fujimoto|Frank|Bus
-INDEX:
+Index:
 712491914:0
 804158049:36
 914893301:100
@@ -12,7 +12,7 @@ AVAILABILITY:
 492553422|Marticu|Bill|Psyc
 712491914|Healey|Christopher|CSC
 No record with SID=420885795 exists
-INDEX:
+Index:
 492553422:128
 712491914:0
 804158049:36
