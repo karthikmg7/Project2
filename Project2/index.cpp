@@ -65,7 +65,8 @@ void writeToResultsFile(MyString str)
 {
 	ofstream outfile;
 		string file=recordName+"_resultsFile.txt";
-  outfile.open(file, std::ios_base::app);
+ outfile.open(file, std::ios_base::app);
+  // outfile.open(file);
   outfile << str<<endl; 
   outfile.close();
 }
@@ -74,7 +75,8 @@ void writeToResultsFile(string str)
 	ofstream outfile;
 	string file=recordName+"_resultsFile.txt";
   outfile.open(file, std::ios_base::app);
-  outfile << str<<endl; 
+  //outfile.open(file);
+	outfile << str<<endl; 
   outfile.close();
 }
 void printIndexArray()
@@ -93,7 +95,12 @@ void printIndexArray()
 
 	for(int j=0;j<indexCount;j++)
 	{
-		string s=to_string(indexArray[j].key)+":"+to_string(indexArray[j].offset);
+		stringstream ss,ss2;
+		ss<<indexArray[j].key;
+		ss2<<indexArray[j].offset;
+
+		string s=ss.str()+":"+ss2.str();
+		//string s=to_string((int)indexArray[j].key)+":"+to_string(indexArray[j].offset);
 		printf( "%d: %ld\n", indexArray[ j ].key, indexArray[ j ].offset );
 		//cout<<indexArray[j].key<<"\n"<<indexArray[j].offset<<"\n\n";
 		writeToResultsFile(s);
@@ -251,7 +258,7 @@ int i=0;
 struct index iInfo;
 int count=0;
 long x=0;
-if(indexFile ==NULL)return;
+if(indexFile==NULL)return;
 while(!indexFile.eof())
 {
 	count++;
@@ -299,10 +306,15 @@ void printAvailabilityList()
 	str="Availability:";
 	cout<<str<<endl;
 	writeToResultsFile(str);
+	
 		while(temp!=NULL)
 		{
-			
-			string s=to_string(temp->aInfo.offset)+":"+to_string(temp->aInfo.size);
+			stringstream ss,ss2;
+		ss<<temp->aInfo.offset;
+		ss2<<temp->aInfo.size;
+
+		string s=ss.str()+":"+ss2.str();
+			//string s=to_string(temp->aInfo.offset)+":"+to_string(temp->aInfo.size);
 				printf( "%d: %ld\n",temp->aInfo.offset, temp->aInfo.size );
 			writeToResultsFile(s);
 			temp=temp->rlink;
@@ -554,11 +566,11 @@ void readInputFile()
 						addToIndexArray(ind);
 						//readFromStudentRecordFile();
 					}
-					else
+					/*else
 					{
 						cout<<"Recoed Already Exists"<<endl;
 						writeToResultsFile("Recoed Already Exists");
-					}
+					}*/
 					break;
 				 }
 		case FIND:{
@@ -609,6 +621,7 @@ void readInputFile()
 				storeIndexInFile();
 	            storeAvailabilityListinFile();
 			    freeMemory();
+				exit(0);
 			break;
 			 }
 		}
@@ -630,7 +643,7 @@ int main(int argc,char* argv[])
 	
 	
 	
-	_getch();
+	//_getch();
 	
 	
 	
