@@ -413,7 +413,7 @@ return tempOff;
 }
 struct StudentRecord readFromStudentRecordFile(int offset)
 {
-	char buffer[ 1024 ];
+	//char buffer[ 1024 ];
 int count=0;
 
 
@@ -448,6 +448,8 @@ fp.open(recordName ,ios::out | ios::in | ios::binary);
 fp.seekg(offset,ios::beg);
 fp.read( (char *)&count, sizeof( int ) );
 sr.size=count-3;
+char *buffer=
+buffer=new char[count+1];
 fp.read( buffer, count);
 string buff=buffer;
 cout<<buff.substr(0,count)<<endl;
